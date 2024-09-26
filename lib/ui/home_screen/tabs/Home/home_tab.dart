@@ -1,163 +1,70 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movies_app/style/app_style.dart';
-import 'package:movies_app/style/resubal_componans/constants.dart';
+import 'package:movies_app/api/api_manager.dart';
+import 'package:movies_app/models/PopularMovies/PopularMovies.dart';
+import 'package:movies_app/models/TopRated/TopRated.dart';
+import 'package:movies_app/ui/home_screen/tabs/Home/Widget/popular_movie_widget.dart';
+import 'package:movies_app/ui/home_screen/tabs/Home/Widget/recommended_section.dart';
+import 'package:movies_app/ui/home_screen/tabs/Home/Widget/upcoming_section.dart';
 
-
-import '/models/Movie.dart';
-
-class HomeTab extends StatelessWidget {
-  Movie movie;
-  bool isDetailed;
-  HomeTab({required this.movie , this.isDetailed = false});
+class HomeTab extends StatefulWidget
+{
+  const HomeTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Stack(
-      alignment: AlignmentDirectional.topStart,
-      children: [
-        CachedNetworkImage(
-          imageUrl: "${Constants.imageUrl}${movie.posterPath}",
-          height: isDetailed?height*0.25:height*0.15,
-          width: isDetailed?width*0.33:width*0.25,
-
-          imageBuilder: (context,provider){
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: provider,fit: BoxFit.cover),
-                borderRadius: BorderRadiusDirectional.circular(5),
-              ),
-            );
-          },
-          placeholder: (context,url){
-            return Center(child: CircularProgressIndicator( color: AppStyle.bottomNavSelectedColor,),);
-          },
-          errorWidget: (context , url,error){
-            return Center(child: Icon(
-              Icons.broken_image_outlined,
-              color: AppStyle.bottomNavSelectedColor,
-              size: 50,
-            ),);
-          },
-        ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: (){
-
-            },
-            child: Image(image: AssetImage('assets/images/add_to_watchlist.png'),
-            ),
-          ),
-        )
-      ],
-    );
-  }
+  State<HomeTab> createState() => _HomeTabState();
 }
-class MovieItem extends StatelessWidget {
-  Movie movie;
-  MovieItem({required this.movie});
+
+class _HomeTabState extends State<HomeTab>
+{
+  late List<TopRated>? items;
 
   @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      width: width*0.25,
-      height: height*0.23,
-      decoration: BoxDecoration(
-          color: AppStyle.itemBackColor,
-          borderRadius: BorderRadiusDirectional.circular(5)
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.topStart,
-            children: [
-              CachedNetworkImage(
-                imageUrl: "${Constants.imageUrl}${movie.posterPath}",
-                height: height*0.15,
-                width: width*0.25,
+  void initState()
+  {
+    // TODO: implement initState
+    super.initState();
+  }
 
-                imageBuilder: (context,provider){
-                  return Container(
-                    decoration: BoxDecoration(
-                        image: DecorationImage(image: provider,fit: BoxFit.cover),
-                        borderRadius: BorderRadiusDirectional.only(topStart: Radius.circular(5),topEnd: Radius.circular(5))
-                    ),
-                  );
-                },
-                placeholder: (context,url){
-                  return Center(child: CircularProgressIndicator( color: AppStyle.bottomNavSelectedColor,),);
-                },
-                errorWidget: (context , url,error){
-                  return Center(child: Icon(Icons.broken_image_outlined,color: AppStyle.bottomNavSelectedColor,),);
-                },
-              ),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: (){print("Add");},
-                  child: Image(
-                    image: AssetImage('assets/images/add_to_watchlist.png'),
-                  ),
-                ),
-              )
-            ],
+  @override
+  Widget build(BuildContext context)
+  {
+    double sizeHeight = MediaQuery.of(context).size.height;
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FutureBuilder<PopularMovies>(
+            future: ApiManager.getPopular(),
+            builder: (context, snapshot)
+            {
+              if (snapshot.hasData)
+              {
+                items = snapshot.data!.results?.cast<TopRated>();
+              }
+              if (snapshot.hasError)
+              {
+                return Center(child: Text('${snapshot.error}'));
+              }
+              if (snapshot.connectionState == ConnectionState.waiting)
+              {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return PopularMovieWidget(items: items);
+            },
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    children: [
-                      Image(
-                        image: AssetImage('assets/images/star.png'),
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 10,),
-                      Text(
-                        '7.7',
-                        style: Theme.of(context).textTheme.displayLarge,
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 5,),
-                  Text(
-                    'DeadPool 2',
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
-                  SizedBox(height: 5,),
-                  Row(
-                    children: [
-                      Text(
-                        '2018',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      SizedBox(width: 10,),
-                      Text(
-                        'R',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      SizedBox(width: 10,),
-                      Text(
-                        '1h,22m',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      SizedBox(width: 10,),
-                    ],
-                  )
-                ],
-              ),
-            ),
+          const SizedBox(height: 10),
+           Expanded(
+            child: UpcomingSectionWidget()
+          ),
+          const SizedBox(height: 5),
+           Expanded(
+              child: RecommendedSectionWidget()
           )
         ],
       ),
     );
   }
 }
+
