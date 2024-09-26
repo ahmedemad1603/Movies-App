@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/ui/home_screen/tabs/browse_tab.dart';
-import 'package:movies_app/ui/home_screen/tabs/home_tab.dart';
+import 'package:movies_app/ui/home_screen/tabs/Home/home_tab.dart';
 import 'package:movies_app/ui/home_screen/tabs/search_tab.dart';
 import 'package:movies_app/ui/home_screen/tabs/watchlist_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'Home';
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
 
   List<Widget> tabs = [
-    HomeTab(),
+    HomeScreen(),
     SearchTab(),
     BrowseTab(),
     WatchlistTab()
