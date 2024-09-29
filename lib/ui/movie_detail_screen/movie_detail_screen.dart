@@ -12,7 +12,7 @@ class MovieDetailScreen extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
-    Result movie = ModalRoute.of(context)?.settings.arguments as Result;
+    TopRatedMovie movie = ModalRoute.of(context)?.settings.arguments as TopRatedMovie;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
