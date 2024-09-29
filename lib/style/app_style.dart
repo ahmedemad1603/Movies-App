@@ -23,6 +23,11 @@ class AppStyle{
             fontSize: 10,
             color: dateTypeColor
           ),
+          displayLarge: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+            color: Colors.white
+          )
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
           showSelectedLabels: true,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies_app/models/TopRatedResponse/TopRatedMovie.dart';
 import 'package:movies_app/style/app_style.dart';
+import 'package:movies_app/ui/movie_detail_screen/movie_detail_screen.dart';
 
 class RecommendedItemWidget extends StatelessWidget
 {
@@ -27,29 +28,34 @@ class RecommendedItemWidget extends StatelessWidget
           Stack(
             alignment: AlignmentDirectional.topStart,
             children: [
-              CachedNetworkImage(
-                imageUrl: "https://image.tmdb.org/t/p/w500${topRated.posterPath}",
-                height: sizeHeight * 0.20,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: topRated);
+                },
+                child: CachedNetworkImage(
+                  imageUrl: "https://image.tmdb.org/t/p/w500${topRated.posterPath}",
+                  height: sizeHeight * 0.20,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover
+                        ),
+                        borderRadius: const BorderRadiusDirectional.only(
+                          topStart: Radius.circular(5),
+                          topEnd: Radius.circular(5)
+                        )
                       ),
-                      borderRadius: const BorderRadiusDirectional.only(
-                        topStart: Radius.circular(5),
-                        topEnd: Radius.circular(5)
-                      )
-                    ),
-                  );
-                },
-                placeholder: (context, url) {
-                  return Center(child: CircularProgressIndicator(color: AppStyle.bottomNavSelectedColor));
-                },
-                errorWidget: (context, url, error) {
-                  return Center(child: Icon(Icons.broken_image_outlined, color: AppStyle.bottomNavSelectedColor));
-                },
+                    );
+                  },
+                  placeholder: (context, url) {
+                    return Center(child: CircularProgressIndicator(color: AppStyle.bottomNavSelectedColor));
+                  },
+                  errorWidget: (context, url, error) {
+                    return Center(child: Icon(Icons.broken_image_outlined, color: AppStyle.bottomNavSelectedColor));
+                  },
+                ),
               ),
               Material(
                 color: Colors.transparent,
