@@ -27,7 +27,7 @@ class _HomeTabState extends State<HomeTab>
   {
     double sizeHeight = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
