@@ -21,7 +21,7 @@ class PopularMovieWidget extends StatelessWidget
     double sizeWidth = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: popularMovie?[0]);
+        Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: popularMovie?[0].id);
       },
       child: Container(
         color: AppStyle.secondaryColor,
