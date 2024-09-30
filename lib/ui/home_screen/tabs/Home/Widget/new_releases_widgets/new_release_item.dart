@@ -23,7 +23,7 @@ class NewReleasesItem extends StatelessWidget
           width: 100,
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: newReleaseMovie);
+              Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: newReleaseMovie.id);
             },
             child: CachedNetworkImage(
               imageUrl: "https://image.tmdb.org/t/p/w500${newReleaseMovie.posterPath}",
